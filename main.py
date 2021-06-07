@@ -77,11 +77,16 @@ def forward_search(all_data, k, folds):
             if acc > best_acc:
                 best_acc = acc
                 best_index = i
-            print("Features:{}, Acc:{}".format(features, acc))
+            # print("Features:{}, Acc:{}".format(features, acc))
 
         # Find best feature
         best_features = features_list[best_index]
-        print("Best features:{}".format(best_features))
+        print("Best features:{}, Acc:{}".format(best_features, best_acc))
+
+        # Update global best
+        if best_acc > global_best_acc:
+            global_best_acc = best_acc
+            global_best_features = best_features
 
         # Generate new feature list
         if len(features_list[0]) >= feature_counts:
@@ -89,11 +94,7 @@ def forward_search(all_data, k, folds):
         else:
             features_list = [best_features + [i] for i in all_features_set - set(best_features)]
 
-        # Update global best
-        if best_acc > global_best_acc:
-            global_best_acc = best_acc
-            global_best_features = best_features
-    print("Global best features:{}, Acc{}".format(global_best_features, global_best_acc))
+    print("Global best features:{}, Acc:{}".format(global_best_features, global_best_acc))
 
 
 
@@ -114,11 +115,16 @@ def backward_elimination(all_data, k, folds):
             if acc > best_acc:
                 best_acc = acc
                 best_index = i
-            print("Features:{}, Acc:{}".format(features, acc))
+            # print("Features:{}, Acc:{}".format(features, acc))
 
         # Find best feature
         best_features = features_list[best_index]
         print("Best features:{}".format(best_features))
+
+        # Update global best
+        if best_acc > global_best_acc:
+            global_best_acc = best_acc
+            global_best_features = best_features
 
         # Generate new feature list
         if len(features_list[0]) <= 1:
@@ -126,11 +132,8 @@ def backward_elimination(all_data, k, folds):
         else:
             features_list = [list(set(best_features) - set([i])) for i in set(best_features)]
 
-        # Update global best
-        if best_acc > global_best_acc:
-            global_best_acc = best_acc
-            global_best_features = best_features
-    print("Global best features:{}, Acc{}".format(global_best_features, global_best_acc))
+
+    print("Global best features:{}, Acc:{}".format(global_best_features, global_best_acc))
 
 
 
@@ -146,7 +149,7 @@ if __name__ == "__main__":
     args = get_parser()
 
     # load data
-    data = np.genfromtxt('datasets/CS205_small_testdata__26.txt')
+    data = np.genfromtxt('datasets/CS205_small_testdata__9.txt')
 
     # preprocess data
     label = data[:, 0:1]
@@ -165,5 +168,5 @@ if __name__ == "__main__":
         backward_elimination(all_data, args.k, args.folds)
     else:
         raise ValueError("Not implemented method!")
-    stop = timeit.default_timer();
+    stop = timeit.default_timer()
     print("total running time: ", stop - start)
