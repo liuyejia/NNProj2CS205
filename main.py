@@ -119,7 +119,7 @@ def backward_elimination(all_data, k, folds):
 
         # Find best feature
         best_features = features_list[best_index]
-        print("Best features:{}".format(best_features))
+        print("Best features:{}, Acc: {}".format(best_features, best_acc))
 
         # Update global best
         if best_acc > global_best_acc:
